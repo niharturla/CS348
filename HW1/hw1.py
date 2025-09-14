@@ -137,7 +137,7 @@ WHERE p.Age = d.Age;
 def query9():
 	return """
  SELECT p.FirstName || ' ' || p.LastName AS PatientName,
-       ROUND(AVG(v.Temperature),1) AS avg_temp,
+       ROUND(AVG(v.Temperature),6) AS avg_temp,
        COUNT(*) AS temp_count
 FROM Patients p
 JOIN Appointments a ON p.PatientID = a.PatientID
@@ -145,6 +145,7 @@ JOIN Vitals v ON a.AppointmentID = v.AppointmentID
 WHERE p.City = 'Springfield'
 GROUP BY p.PatientID
 HAVING COUNT(*) >= 2;
+
 
 	"""
 
