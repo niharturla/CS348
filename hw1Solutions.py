@@ -136,15 +136,16 @@ WHERE p.Age = d.Age;
 
 def query9():
 	return """
- SELECT p.FirstName || ' ' || p.LastName AS PatientName,
-       ROUND(AVG(v.Temperature),6) AS avg_temp,
-       COUNT(*) AS temp_count
-FROM Patients p
-JOIN Appointments a ON p.PatientID = a.PatientID
-JOIN Vitals v ON a.AppointmentID = v.AppointmentID
-WHERE p.City = 'Springfield'
-GROUP BY p.PatientID
-HAVING COUNT(*) >= 2;
+ SELECT
+  P.FirstName || ' ' || P.LastName AS PatientName,
+  AVG(V.Temperature) AS avg_temp,
+  COUNT(V.Temperature) AS temp_count
+FROM Patients P
+JOIN Appointments A ON P.PatientID = A.PatientID
+JOIN Vitals V ON A.AppointmentID = V.AppointmentID
+WHERE P.City = 'Springfield'
+GROUP BY P.PatientID
+HAVING temp_count >= 2;
 
 
 	"""
