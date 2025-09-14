@@ -153,23 +153,28 @@ HAVING temp_count >= 2;
 def query10():
 	return """
 SELECT
-  D.Specialty,
-  -- Count distinct doctors in this specialty
-  (SELECT COUNT(*) FROM Doctors D2 WHERE D2.Specialty = D.Specialty) AS number_doctors,
-  -- Count distinct patients seen by any doctor in this specialty
-  (SELECT COUNT(DISTINCT A2.PatientID)
-     FROM Appointments A2
-     JOIN Doctors D2 ON A2.DoctorID = D2.DoctorID
-     WHERE D2.Specialty = D.Specialty) AS number_patients,
-  -- Count distinct drugs prescribed by any doctor in this specialty
-  (SELECT COUNT(DISTINCT Pr2.DrugID)
-     FROM Appointments A2
-     JOIN Doctors D2 ON A2.DoctorID = D2.DoctorID
-     JOIN Prescriptions Pr2 ON A2.AppointmentID = Pr2.AppointmentID
-     WHERE D2.Specialty = D.Specialty) AS number_drugs
-FROM Doctors D
-GROUP BY D.Specialty
-ORDER BY D.Specialty;
+  S.Specialty,
+  S.number_doctors,
+  COALESCE(A.number_patients, 0) AS number_patients,
+  COALESCE(DR.number_drugs, 0) AS number_drugs
+FROM
+  (SELECT Specialty, COUNT(DISTINCT DoctorID) AS number_doctors
+   FROM Doctors
+   GROUP BY Specialty) S
+LEFT JOIN
+  (SELECT D.Specialty, COUNT(*) AS number_patients
+   FROM Doctors D
+   JOIN Appointments A ON D.DoctorID = A.DoctorID
+   GROUP BY D.Specialty) A
+ON S.Specialty = A.Specialty
+LEFT JOIN
+  (SELECT D.Specialty, COUNT(*) AS number_drugs
+   FROM Doctors D
+   JOIN Appointments A ON D.DoctorID = A.DoctorID
+   JOIN Prescriptions Pr ON A.AppointmentID = Pr.AppointmentID
+   GROUP BY D.Specialty) DR
+ON S.Specialty = DR.Specialty
+ORDER BY S.Specialty;
 	"""
 
 def query11():
