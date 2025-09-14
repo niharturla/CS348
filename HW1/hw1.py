@@ -151,16 +151,24 @@ HAVING COUNT(*) >= 2;
 
 def query10():
 	return """
- SELECT 
-    d.Specialty,
-    COUNT(DISTINCT d.DoctorID) AS number_doctors,
-    COUNT(DISTINCT a.PatientID) AS number_patients,
-    COUNT(DISTINCT pr.DrugID) AS number_drugs
-FROM Doctors d
-LEFT JOIN Appointments a ON d.DoctorID = a.DoctorID
-LEFT JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
-GROUP BY d.Specialty;
-
+SELECT
+  D.Specialty,
+  -- Count distinct doctors in this specialty
+  (SELECT COUNT(*) FROM Doctors D2 WHERE D2.Specialty = D.Specialty) AS number_doctors,
+  -- Count distinct patients seen by any doctor in this specialty
+  (SELECT COUNT(DISTINCT A2.PatientID)
+     FROM Appointments A2
+     JOIN Doctors D2 ON A2.DoctorID = D2.DoctorID
+     WHERE D2.Specialty = D.Specialty) AS number_patients,
+  -- Count distinct drugs prescribed by any doctor in this specialty
+  (SELECT COUNT(DISTINCT Pr2.DrugID)
+     FROM Appointments A2
+     JOIN Doctors D2 ON A2.DoctorID = D2.DoctorID
+     JOIN Prescriptions Pr2 ON A2.AppointmentID = Pr2.AppointmentID
+     WHERE D2.Specialty = D.Specialty) AS number_drugs
+FROM Doctors D
+GROUP BY D.Specialty
+ORDER BY D.Specialty;
 	"""
 
 def query11():
