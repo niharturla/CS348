@@ -18,54 +18,185 @@ instr = '''Instructions:
 
 def query1():
 	return """
+ SELECT p.FirstName, p.LastName, a.AppointmentDateTime, a.Reason, a.Diagnosis
+	FROM Appointments a
+	JOIN Patients p ON a.PatientID = p.PatientID;
 	"""
 
 def query2():
 	return """
+ SELECT d.FirstName || ' ' || d.LastName AS DoctorName,
+	       COUNT(*) AS total_appointments,
+	       COUNT(DISTINCT a.PatientID) AS distinct_patients
+	FROM Doctors d
+	JOIN Appointments a ON d.DoctorID = a.DoctorID
+	GROUP BY d.DoctorID, DoctorName;
 	"""
 
 def query3():
 	return """
+ SELECT p.FirstName || ' ' || p.LastName AS PatientName,
+	       COUNT(*) AS total_prescriptions,
+	       SUM(pr.Price) AS total_cost
+	FROM Patients p
+	JOIN Appointments a ON p.PatientID = a.PatientID
+	JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
+	GROUP BY p.PatientID;
 	"""
 	
 def query4():
 	return """
+ SELECT p.FirstName || ' ' || p.LastName AS PatientName,
+	       doc.FirstName || ' ' || doc.LastName AS DoctorName,
+	       v.DateTime AS vital_time,
+	       v.Temperature,
+	       dr.Name AS drug_name,
+	       pr.Dosage
+	FROM Vitals v
+	JOIN Appointments a ON v.AppointmentID = a.AppointmentID
+	JOIN Patients p ON a.PatientID = p.PatientID
+	JOIN Doctors doc ON a.DoctorID = doc.DoctorID
+	JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
+	JOIN Drugs dr ON pr.DrugID = dr.ID;
 	"""
 
 def query5():
 	return """
+ SELECT 
+    p.FirstName || ' ' || p.LastName AS PatientName,
+    d.FirstName || ' ' || d.LastName AS DoctorName,
+    v.DateTime AS vital_time,
+    v.Temperature,
+    dr.Name AS drug_name,
+    pr.Dosage
+FROM Patients p
+LEFT JOIN Appointments a ON p.PatientID = a.PatientID
+LEFT JOIN Doctors d ON a.DoctorID = d.DoctorID
+LEFT JOIN Vitals v ON a.AppointmentID = v.AppointmentID
+LEFT JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
+LEFT JOIN Drugs dr ON pr.DrugID = dr.ID
+UNION
+SELECT 
+    NULL AS PatientName,
+    d.FirstName || ' ' || d.LastName AS DoctorName,
+    NULL, NULL, NULL, NULL
+FROM Doctors d
+WHERE d.DoctorID NOT IN (SELECT DoctorID FROM Appointments)
+UNION
+SELECT 
+    NULL AS PatientName,
+    NULL AS DoctorName,
+    NULL, NULL, dr.Name, NULL
+FROM Drugs dr
+WHERE dr.ID NOT IN (SELECT DrugID FROM Prescriptions)
+
 	"""
 
 def query6():
 	return """
+ SELECT p.FirstName || ' ' || p.LastName AS PatientName,
+       d.FirstName || ' ' || d.LastName AS DoctorName,
+       v.DateTime AS vital_time,
+       v.Temperature,
+       dr.Name AS drug_name,
+       pr.Dosage
+FROM Patients p
+LEFT JOIN Appointments a ON p.PatientID = a.PatientID
+LEFT JOIN Doctors d ON a.DoctorID = d.DoctorID
+LEFT JOIN Vitals v ON a.AppointmentID = v.AppointmentID
+LEFT JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
+LEFT JOIN Drugs dr ON pr.DrugID = dr.ID
+
+
 	"""
 
 def query7():
 	return """
+
+ SELECT p1.FirstName || ' ' || p1.LastName AS Patient1,
+       p2.FirstName || ' ' || p2.LastName AS Patient2,
+       p1.City
+FROM Patients p1
+JOIN Patients p2 ON p1.City = p2.City AND p1.PatientID < p2.PatientID;
+
 	"""
 
 def query8():
 	return """
+ SELECT p.FirstName || ' ' || p.LastName AS Patient,
+       d.FirstName || ' ' || d.LastName AS Doctor,
+       p.Age AS Age,
+       a.AppointmentDateTime
+FROM Appointments a
+JOIN Patients p ON a.PatientID = p.PatientID
+JOIN Doctors d ON a.DoctorID = d.DoctorID
+WHERE p.Age = d.Age;
+
 	"""
 
 def query9():
 	return """
+ SELECT p.FirstName || ' ' || p.LastName AS PatientName,
+       ROUND(AVG(v.Temperature),1) AS avg_temp,
+       COUNT(*) AS temp_count
+FROM Patients p
+JOIN Appointments a ON p.PatientID = a.PatientID
+JOIN Vitals v ON a.AppointmentID = v.AppointmentID
+WHERE p.City = 'Springfield'
+GROUP BY p.PatientID
+HAVING COUNT(*) >= 2;
+
 	"""
 
 def query10():
 	return """
+ SELECT 
+    d.Specialty,
+    COUNT(DISTINCT d.DoctorID) AS number_doctors,
+    COUNT(DISTINCT a.PatientID) AS number_patients,
+    COUNT(DISTINCT pr.DrugID) AS number_drugs
+FROM Doctors d
+LEFT JOIN Appointments a ON d.DoctorID = a.DoctorID
+LEFT JOIN Prescriptions pr ON a.AppointmentID = pr.AppointmentID
+GROUP BY d.Specialty;
+
 	"""
 
 def query11():
 	return """
+ SELECT DISTINCT p.City, p.ZipCode
+FROM Patients p
+WHERE NOT EXISTS (
+    SELECT 1 FROM Doctors d WHERE d.City = p.City AND d.ZipCode = p.ZipCode
+);
+
 	"""
 
 def query12():
 	return """
+ SELECT 'reason is Checkup' AS appointment_type, COUNT(*) AS appointments_count
+FROM Appointments
+WHERE Reason LIKE '%Checkup%'
+UNION
+SELECT 'diagonsis is Healthy', COUNT(*)
+FROM Appointments
+WHERE Diagnosis LIKE '%Healthy%';
+
 	"""
 
 def query13():
 	return """
+ SELECT a.AppointmentID,
+       p.FirstName || ' ' || p.LastName AS PatientName,
+       d.FirstName || ' ' || d.LastName AS DoctorName
+FROM Appointments a
+JOIN Patients p ON a.PatientID = p.PatientID
+JOIN Doctors d ON a.DoctorID = d.DoctorID
+WHERE EXISTS (SELECT 1 FROM Prescriptions pr JOIN Drugs dr ON pr.DrugID = dr.ID
+              WHERE pr.AppointmentID = a.AppointmentID AND dr.Name = 'Ibuprofen')
+  AND EXISTS (SELECT 1 FROM Prescriptions pr JOIN Drugs dr ON pr.DrugID = dr.ID
+              WHERE pr.AppointmentID = a.AppointmentID AND dr.Name = 'Amoxicillin');
+
 	"""
 
 
