@@ -193,7 +193,8 @@ Patient   Doctor        Age  AppointmentDateTime
 John Doe  Alice Wilson  42   2024-01-10 09:00
 
 ============================
-9) For every patient living in Springfield, display the count of tempreature records and the average of those records. Keep only patients with two or more tempreature records.
+9) For every patient living in Springfield, display the count of tempreature records and the average of those records. 
+Keep only patients with two or more tempreature records.
 
 PatientName  avg_temp  temp_count
 -----------  --------  ----------
@@ -201,7 +202,8 @@ Jane Smith   98.9      2
 
 
 =======================================
-10) For each Specialty, count the number of doctors, the number of patients seen by the specialty doctors, and the number of drugs prescribed by the specialty doctors. 
+10) For each Specialty, count the number of doctors, the number of patients seen by the specialty doctors, 
+and the number of drugs prescribed by the specialty doctors. 
 
 Specialty         number_doctors  number_patients  number_drugs
 ----------------  --------------  ---------------  ------------
@@ -220,7 +222,9 @@ Hillsdale  67890
 
 
 ====================================
-12) Count the appointments whose reason contains the word 'Checkup'. Also, Count the appointments whose diagnosis contains the word 'Healthy'. Note that you can add a string as a column like in the expected result below (e.g., Select GPA, 'Out of 4.0' as a description ...)
+12) Count the appointments whose reason contains the word 'Checkup'. Also, Count the 
+appointments whose diagnosis contains the word 'Healthy'. Note that you can add a string as a column 
+like in the expected result below (e.g., Select GPA, 'Out of 4.0' as a description ...)
 
 appointment_type      appointments_count
 --------------------  ------------------
