@@ -69,3 +69,7 @@ i) Very Useful for Clustered B+ Tree on index rank.
 
 Question 4
 
+b) Yes — scan all leaves of the bid_price index and compute average from index-only values.
+c) No — DISTINCT VIN not in index; must fetch table records.
+d) No — VIN and customer_no require table access.
+e) Yes — use l1(<make, model>) to find Honda RIDs and l2(<year>) to retrieve year values; no table I/O needed.
