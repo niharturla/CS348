@@ -1,7 +1,9 @@
 Question 1
 
-a) R1 = (Language, Country, NumSpeakers, LanguageFamily)
+a) R1 = (Language, Country, NumSpeakers, LanguageBranch)
    R2 = (Language, Dialect, DialectSpeakers, LanguageFamily)
+
+b)
 
 | Language | Country | NumSpeakers  | LanguageBranch |
 |----------|---------|--------------|----------------|
@@ -9,4 +11,61 @@ a) R1 = (Language, Country, NumSpeakers, LanguageFamily)
 | Spanish  | USA     | 41,000,000   | Romance        |
 | Hindi    | India   | 600,000,000  | Indo-Aryan     |
 
-  
+c)
+
+INSERT INTO R1 VALUES ('Spanish', 'USA', 41000000, 'Germanic');
+
+| Language | Country | NumSpeakers  | LanguageBranch |
+|----------|---------|--------------|----------------|
+| Spanish  | Mexico  | 126,000,000  | Romance        |
+| Spanish  | USA     | 41,000,000   | Germanic       |
+
+d) 
+
+BCNF decomposition of Relation R1:
+
+   R1_1(Language, LanguageBranch)
+   R1_2(Language, Country, NumSpeakers)
+
+BCNF decomposition of Relation R2:
+
+   R2_1(Language, LanguageBranch)
+   R2_2(Language, Dialect, DialectSpeakers)
+
+e) Both of my decompositions are lossless since the common attribute in the decomposed relations is the key of one of the relations.
+
+f) Given the relation, R = (Language, Country, NumSpeakers, LanguageBranch): We can decompose it to show lossy decomposition
+
+   R1_1(Language, NumSpeakers
+   R1_2(Country, LanguageBranch)
+
+   Since there are no common attributes, the natural join of the two relationships will result in extra tuples.
+
+Question 2
+
+
+a) We can have an interface, such as a web form, that allows the user to sign up with the fields in the table. 
+It will allow a user to update the zipcode and state independently. For example, if a user updated the state, but not the zipcode, this can result in troublesome 
+FDs as some zipcodes will have multiple states. The FD requires that a given (id, zipCode) pair always maps to one unique State.
+
+
+b) Since id is no longer the primary key, we can make (id, timestamp) the primary, composite, key for the table.
+
+Question 3
+
+Clustered B+ Tree: (rank)
+Unclustered B+ Tree: (rating, price)
+Hash index: (id)
+
+a) Very useful. This query is very useful for Hash index on id. We will have constant time lookup.
+b) Not useful. Since no_purchases is not indexed, none of the indexes are suitable.
+c) Very Useful for Clustered B+ Tree on index rank.
+d) Very useful for Unclustered B+ Tree on index (rating, price)
+e) Very useful for Unclustered B+ Tree on index (rating, price)
+f) Somewhat useful for Unclustered B+ Tree on index (rating, price)
+g) Somewhat useful for Unclustered B+ tree on index (rating, price)
+h) Somewhat useful for Unclustered B+ tree on index (rating, price)
+i) Very Useful for Clustered B+ Tree on index rank.
+
+Question 4
+
