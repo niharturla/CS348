@@ -1,1 +1,12 @@
-1) txt
+Question 1
+
+a) R1 = (Language, Country, NumSpeakers, LanguageFamily)
+   R2 = (Language, Dialect, DialectSpeakers, LanguageFamily)
+
+| Language | Country | NumSpeakers  | LanguageBranch |
+|----------|---------|--------------|----------------|
+| Spanish  | Mexico  | 126,000,000  | Romance        |
+| Spanish  | USA     | 41,000,000   | Romance        |
+| Hindi    | India   | 600,000,000  | Indo-Aryan     |
+
+  
