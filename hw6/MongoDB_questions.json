@@ -1,0 +1,234 @@
+CS348, Fall 2025. Homework 6 (Neo4J and MongoDB).
+
+Due date: 12/1/2025
+
+For questions MongoDB questions, consider the Bills and Congress collections provided with this homework (sources for the data sets are projects.propublica.org and govtrack.us, respectively). The bills collection contains a few bills discussed in the US congress. The congress collection includes information about the US congress members.
+ٍ
+To upload the collections to MongoDB, use the mongoimport command as follows:
+mongoimport --db dbhw7 --collection bills --file bills.json
+mongoimport --db dbhw7 --collection congress --file congress.json
+
+If the mongoimport utility is not installed, check the MongoDb dcoumentation about how to install it.
+
+Submissions: Copy your queries to HW6_MongoDB.py. Submit your Python file to Brightspace.
+
+(6.25 points for each question)
+
+1 - List title, sponsor name, and sponsor state for bills sponsored by Marco Rubio.
+
+Expected Output:
+{
+        "title" : "Wireless Innovation Act of 2014",
+        "sponsor_name" : "Marco Rubio",
+        "sponsor_state" : "FL"
+}
+{
+        "title" : "Wireless Innovation Act of 2015",
+        "sponsor_name" : "Marco Rubio",
+        "sponsor_state" : "FL"
+}
+
+-----------------------------------------------
+2 - List title, sponsor name, and the number of cosponsors for bills with the number of cosponsors between 3 and 5 inclusive.
+
+Expected Output:
+{
+        "title" : "Efficient Use of Government Spectrum Act of 2013",
+        "sponsor_name" : "Doris Matsui",
+        "cosponsors" : 4
+}
+{
+        "title" : "Wireless Innovation Act of 2015",
+        "sponsor_name" : "Marco Rubio",
+        "cosponsors" : 5
+}
+{
+        "title" : "Coast Guard Authorization Act of 2017",
+        "sponsor_name" : "Dan Sullivan",
+        "cosponsors" : 3
+}
+
+------------------------------------------------
+3 - List title, sponsor name, and the number of cosponsors for any bill sponsored by Marco Rubio or has a number of cosponsors between 3 and 5 inclusive.
+
+Expected Output:
+{
+        "title" : "Efficient Use of Government Spectrum Act of 2013",
+        "sponsor_name" : "Doris Matsui",
+        "cosponsors" : 4
+}
+{
+        "title" : "Wireless Innovation Act of 2014",
+        "sponsor_name" : "Marco Rubio",
+        "cosponsors" : 0
+}
+{
+        "title" : "Wireless Innovation Act of 2015",
+        "sponsor_name" : "Marco Rubio",
+        "cosponsors" : 5
+}
+{
+        "title" : "Coast Guard Authorization Act of 2017",
+        "sponsor_name" : "Dan Sullivan",
+        "cosponsors" : 3
+}
+-------------------------------------
+4 - Use MongoDB aggregates to count the senators and representatives in Indiana (use role_type to distinguish between senators and representatives)
+
+Expected Output:
+{ "_id" : "representative", "count_of_this_role" : 9 }
+{ "_id" : "senator", "count_of_this_role" : 2 }
+
+---------------------------------------
+5 - For each bill, list the bill's title and sponsor name as well as the description and the DOB of the sponsor (description and DOB are included in the congress collection)
+
+Expected Output:
+{
+        "title" : "Promoting Unlicensed Spectrum Act of 2015",
+        "sponsor_name" : "Brian Schatz",
+        "description" : "Senior Senator for Hawaii",
+        "DOB" : "1972-10-20"
+}
+{
+        "title" : "Efficient Use of Government Spectrum Act of 2013",
+        "sponsor_name" : "Doris Matsui",
+        "description" : "Representative for California's 6th congressional district",
+        "DOB" : "1944-09-25"
+}
+{
+        "title" : "Wireless Innovation Act of 2014",
+        "sponsor_name" : "Marco Rubio",
+        "description" : "Senior Senator for Florida",
+        "DOB" : "1971-05-28"
+}
+{
+        "title" : "Wireless Innovation Act of 2015",
+        "sponsor_name" : "Marco Rubio",
+        "description" : "Senior Senator for Florida",
+        "DOB" : "1971-05-28"
+}
+{
+        "title" : "Reducing Employer Burdens, Unleashing Innovation, and Labor Development Act of 2013",
+        "sponsor_name" : "Brett Guthrie",
+        "description" : "Representative for Kentucky's 2nd congressional district",
+        "DOB" : "1964-02-18"
+}
+{
+        "title" : "MOBILE NOW Act",
+        "sponsor_name" : "John Thune",
+        "description" : "Senior Senator for South Dakota",
+        "DOB" : "1961-01-07"
+}
+{
+        "title" : "MOBILE NOW Act",
+        "sponsor_name" : "John Thune",
+        "description" : "Senior Senator for South Dakota",
+        "DOB" : "1961-01-07"
+}
+{
+        "title" : "Coast Guard Authorization Act of 2017",
+        "sponsor_name" : "Dan Sullivan",
+        "description" : "Junior Senator for Alaska",
+        "DOB" : "1964-11-13"
+}
+{
+        "title" : "FCC Reauthorization Act of 2016",
+        "sponsor_name" : "John Thune",
+        "description" : "Senior Senator for South Dakota",
+        "DOB" : "1961-01-07"
+}
+--------------------------------------------------------
+6- For each committee code, count the number of bills that included the code. Use MongoDB aggregates for this task.
+
+Expected Output (row order is not important):
+{ "_id" : "SSCM", "countOfCommittee" : 7 }
+{ "_id" : "HSAS", "countOfCommittee" : 2 }
+{ "_id" : "HSWM", "countOfCommittee" : 2 }
+{ "_id" : "HSIF", "countOfCommittee" : 2 }
+{ "_id" : "HSHA", "countOfCommittee" : 1 }
+{ "_id" : "HSII", "countOfCommittee" : 1 }
+{ "_id" : "HSRU", "countOfCommittee" : 1 }
+{ "_id" : "SSFI", "countOfCommittee" : 1 }
+{ "_id" : "HSED", "countOfCommittee" : 1 }
+{ "_id" : "HSFA", "countOfCommittee" : 1 }
+{ "_id" : "HSAP", "countOfCommittee" : 1 }
+{ "_id" : "HSJU", "countOfCommittee" : 1 }
+{ "_id" : "HSSY", "countOfCommittee" : 1 }   
+-----------------------------------------
+7) Find pairs of bills from the same sponsor state.
+
+Expected Output:
+{
+        "_id" : ObjectId("655ad26d680e92a05ab200b6"),
+        "title" : "Wireless Innovation Act of 2015",
+        "sponsor_name" : "Marco Rubio",
+        "sponsor_state" : "FL",
+        "otherbill_id" : ObjectId("655ad26d680e92a05ab200b8"),
+        "otherbill_title" : "Wireless Innovation Act of 2014",
+        "otherbill_sponsor_name" : "Marco Rubio",
+        "otherbill_sponsor_state" : "FL"
+}
+{
+        "_id" : ObjectId("655ad26d680e92a05ab200bb"),
+        "title" : "MOBILE NOW Act",
+        "sponsor_name" : "John Thune",
+        "sponsor_state" : "SD",
+        "otherbill_id" : ObjectId("655ad26d680e92a05ab200bc"),
+        "otherbill_title" : "FCC Reauthorization Act of 2016",
+        "otherbill_sponsor_name" : "John Thune",
+        "otherbill_sponsor_state" : "SD"
+}
+{
+        "_id" : ObjectId("655ad26d680e92a05ab200bb"),
+        "title" : "MOBILE NOW Act",
+        "sponsor_name" : "John Thune",
+        "sponsor_state" : "SD",
+        "otherbill_id" : ObjectId("655ad26d680e92a05ab200bd"),
+        "otherbill_title" : "MOBILE NOW Act",
+        "otherbill_sponsor_name" : "John Thune",
+        "otherbill_sponsor_state" : "SD"
+}
+{
+        "_id" : ObjectId("655ad26d680e92a05ab200bc"),
+        "title" : "FCC Reauthorization Act of 2016",
+        "sponsor_name" : "John Thune",
+        "sponsor_state" : "SD",
+        "otherbill_id" : ObjectId("655ad26d680e92a05ab200bd"),
+        "otherbill_title" : "MOBILE NOW Act",
+        "otherbill_sponsor_name" : "John Thune",
+        "otherbill_sponsor_state" : "SD"
+}    
+
+8) Find a pair of congress members from the same state and having the same last name.
+
+Expected Output:
+{
+    "_id" : ObjectId("655ad28656079c3e33ba8276"),
+    "state" : "IL",
+    "firstname" : "Danny",
+    "lastname" : "Davis",
+    "otherPerson_id" : ObjectId("655ad28656079c3e33ba8304"),
+    "otherPerson_firstname" : "Rodney",
+    "otherPerson_lastname" : "Davis",
+    "otherPerson_state" : "IL"
+}
+{
+    "_id" : ObjectId("655ad28656079c3e33ba82b3"),
+    "state" : "NY",
+    "firstname" : "Carolyn",
+    "lastname" : "Maloney",
+    "otherPerson_id" : ObjectId("655ad28656079c3e33ba830f"),
+    "otherPerson_firstname" : "Sean",
+    "otherPerson_lastname" : "Maloney",
+    "otherPerson_state" : "NY"
+}
+{
+    "_id" : ObjectId("655ad28656079c3e33ba82d2"),
+    "state" : "GA",
+    "firstname" : "Austin",
+    "lastname" : "Scott",
+    "otherPerson_id" : ObjectId("655ad28656079c3e33ba82d3"),
+    "otherPerson_firstname" : "David",
+    "otherPerson_lastname" : "Scott",
+    "otherPerson_state" : "GA"
+}
